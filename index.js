@@ -11,6 +11,9 @@ const API_KEY = '1bec7059';
 
 server.use(bodyParser.json());
 
+server.post('/get-movie-details', (req, res) => {
+    res.send('hello world');
+})
 
 server.post('/get-movie-details', (req, res) => {
     const movieToSearch = req.body.result && req.body.result.parameters && req.body.result.parameters.movie ? req.body.result.parameters.movie : 'The Godfather';
