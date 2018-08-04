@@ -7,7 +7,7 @@ server.use(bodyParser.urlencoded({
     extended: true
 }));
 
-const API_KEY = '1bec7059';
+const API_KEY = '0f46ade723efd6f37b48cc8c20b799a3';
 
 server.use(bodyParser.json());
 
@@ -15,30 +15,30 @@ server.get('/', (req, res) => {
     res.send('hello world');
 })
 
-server.post('/get-movie-details', (req, res) => {
-    const movieToSearch = req.body.result && req.body.result.parameters && req.body.result.parameters.movie ? req.body.result.parameters.movie : 'The Godfather';
-    const reqUrl = encodeURI(`http://www.omdbapi.com/?t=${movieToSearch}&apikey=${API_KEY}`);
+server.post('/get-artist-details', (req, res) => {
+    const artistToSearch = req.body.artist ? req.body.artist.name : 'eminem';
+    const reqUrl = encodeURI(`http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${artistToSearch}&api_key=${API_KEY}&format=json`);
     http.get(reqUrl, (responseFromAPI) => {
         let completeResponse = '';
         responseFromAPI.on('data', (chunk) => {
             completeResponse += chunk;
         });
         responseFromAPI.on('end', () => {
-            const movie = JSON.parse(completeResponse);
-            let dataToSend = movieToSearch === 'The Godfather' ? `I don't have the required info on that. Here's some info on 'The Godfather' instead.\n` : '';
-            dataToSend += `${movie.Title} is a ${movie.Actors} starer ${movie.Genre} movie, released in ${movie.Year}. It was directed by ${movie.Director}`;
+            const interpret = JSON.parse(completeResponse);
+            let dataToSend = artistToSearch === 'Eminem' ? `I don't have the required info on that. Here's some info on 'eminem' instead.\n` : '';
+            dataToSend += `the biography for ${interpret.artist.name} is: ${interpret.artist.bio.content}`;
 
             return res.json({
                 speech: dataToSend,
                 displayText: dataToSend,
-                source: 'get-movie-details'
+                source: 'get-artist-details'
             });
         });
     }, (error) => {
         return res.json({
             speech: 'Something went wrong!',
             displayText: 'Something went wrong!',
-            source: 'get-movie-details'
+            source: 'get-artist-details'
         });
     });
 });
