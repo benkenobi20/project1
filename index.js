@@ -16,7 +16,7 @@ server.get('/', (req, res) => {
 })
 
 server.post('/get-artist-details', (req, res) => {
-    const artistToSearch = req.body.artist ? req.body.artist.name : 'eminem';
+    const artistToSearch = req.body.result && req.body.result.parameters && req.body.result.parameters.name ? req.body.result.parameters.name : 'eminem';
     const reqUrl = encodeURI(`http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${artistToSearch}&api_key=${API_KEY}&format=json`);
     http.get(reqUrl, (responseFromAPI) => {
         let completeResponse = '';
