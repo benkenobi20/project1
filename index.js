@@ -11,7 +11,7 @@ const API_KEY = '1bec7059';
 
 server.use(bodyParser.json());
 
-server.post('/get-movie-details', (req, res) => {
+server.get('/', (req, res) => {
     res.send('hello world');
 })
 
