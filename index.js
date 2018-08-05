@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
-var htmlToPdf = require('html-to-pdf');
+var pdf = require('html-pdf')
 var fs = require('fs');
 
 const sendmail = require('sendmail')();
@@ -60,11 +60,11 @@ server.post('/get-artist-details', (req, res) => {
 });
 
 function createIt (text, callback) {
-    //createHtml(text, function() {
+    createHtml(text, function() {
         mail(function() {
             callback()
         });
-    //});
+    });
 }
 
 function htmlFormater (text) {
@@ -73,19 +73,11 @@ function htmlFormater (text) {
 
 function createHtml(text, callback) {
     let html = htmlFormater(text)
-    htmlToPdf.convertHTMLString(html, pdfPath,
-    function (error, success) {
-        if (error) {
-                console.log('Oh noes! Errorz!');
-                console.log(error);
-            } else {
-                console.log('Woot! Success!');
-                console.log(success);
-                callback()
-            }
-        }
-    );
-    
+    pdf.create(html).toFile(pdfPath, function(err, res) {
+        if (err) return console.log(err);
+        console.log(res); // { filename: '/app/businesscard.pdf' }
+        callback()
+    });       
 }
 
 function mail (callback) {
