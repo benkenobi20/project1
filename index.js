@@ -27,8 +27,8 @@ server.post('/send-mail', (req, res) => {
         subject: 'Dein Google Assistant',
         html: 'Hallo, ich habe folgendes PDF für die erstellt:'
     }, function(err, reply) {
-        //console.log(err && err.stack);
-        //console.dir(reply);
+        console.log(err && err.stack);
+        console.dir(reply);
     });
     /*const text = req.body.result && req.body.result.parameters && req.body.result.parameters.text ? req.body.result.parameters.text : 'Ich habe dich nicht verstanden';
     createIt (text, function() {
