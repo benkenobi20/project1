@@ -12,12 +12,12 @@ server.use(bodyParser.urlencoded({
     extended: true
 }));
 
-const API_KEY = '0f46ade723efd6f37b48cc8c20b799a3';
+const API_KEY = '';
 
 server.use(bodyParser.json());
 
 server.get('/', (req, res) => {
-    res.send('hello world');
+    res.send('Server aktiv');
 })
 
 server.post('/send-mail', (req, res) => {
@@ -83,8 +83,8 @@ function createHtml(text, callback) {
 function mail (callback) {
     fs.readFile(pdfPath, function (err, data) {
         sendmail({
-            from: '20benny04@googlemail.com',
-            to: 'kuehni011@yahoo.de',
+            from: '',
+            to: '',
             subject: 'Dein Google Assistant',
             html: 'Hallo, ich habe folgendes PDF für die erstellt:',
             attachments: [{'filename': 'result.pdf', 'content': data}]
