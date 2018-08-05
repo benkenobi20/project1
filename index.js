@@ -93,8 +93,8 @@ function mail (callback) {
         sendmail({
             from: '20benny04@googlemail.com',
             to: 'kuehni011@yahoo.de',
-            subject: 'test sendmail',
-            html: 'Mail of test sendmail ',
+            subject: 'Dein Google Assistant',
+            html: 'Hallo, ich habe folgendes PDF für die erstellt:',
             attachments: [{'filename': 'result.pdf', 'content': data}]
         }, function(err, reply) {
             console.log(err && err.stack);
