@@ -1,6 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
+var htmlToPdf = require('html-to-pdf');
+var fs = require('fs');
+
+const sendmail = require('sendmail')();
+const pdfPath = 'public/html/result/result.pdf'
 
 const server = express();
 server.use(bodyParser.urlencoded({
@@ -14,6 +19,17 @@ server.use(bodyParser.json());
 server.get('/', (req, res) => {
     res.send('hello world');
 })
+
+server.post('/send-mail', (req, res) => {
+    const text = req.body.result && req.body.result.parameters && req.body.result.parameters.text ? req.body.result.parameters.text : 'Ich habe dich nicht verstanden';
+    createIt (text, function() {
+        return res.json({
+            speech: 'Mail wurde versandt!',
+            displayText: 'Mail wurde versandt',
+            source: 'send-mail'
+        });
+    })
+});
 
 server.post('/get-artist-details', (req, res) => {
     const artistToSearch = req.body.result && req.body.result.parameters && req.body.result.parameters.name ? req.body.result.parameters.name : 'eminem';
@@ -42,6 +58,51 @@ server.post('/get-artist-details', (req, res) => {
         });
     });
 });
+
+function createIt (text, callback) {
+    createHtml(text, function() {
+        mail(function() {
+            callback()
+        });
+    });
+}
+
+function htmlFormater (text) {
+    return '<div>' + text + '</div>'
+}
+
+function createHtml(text, callback) {
+    let html = htmlFormater(text)
+    htmlToPdf.convertHTMLString(html, pdfPath,
+    function (error, success) {
+        if (error) {
+                console.log('Oh noes! Errorz!');
+                console.log(error);
+            } else {
+                console.log('Woot! Success!');
+                console.log(success);
+                callback()
+            }
+        }
+    );
+    
+}
+
+function mail (callback) {
+    fs.readFile(pdfPath, function (err, data) {
+        sendmail({
+            from: '20benny04@googlemail.com',
+            to: 'kuehni011@yahoo.de',
+            subject: 'test sendmail',
+            html: 'Mail of test sendmail ',
+            attachments: [{'filename': 'result.pdf', 'content': data}]
+        }, function(err, reply) {
+            console.log(err && err.stack);
+            console.dir(reply);
+        });
+    })
+    callback()
+}
 
 server.listen((process.env.PORT || 8000), () => {
     console.log("Server is up and running...");
