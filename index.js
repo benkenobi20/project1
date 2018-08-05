@@ -60,11 +60,11 @@ server.post('/get-artist-details', (req, res) => {
 });
 
 function createIt (text, callback) {
-    createHtml(text, function() {
+    //createHtml(text, function() {
         mail(function() {
             callback()
         });
-    });
+    //});
 }
 
 function htmlFormater (text) {
