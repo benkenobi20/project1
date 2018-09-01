@@ -12,7 +12,7 @@ server.use(bodyParser.urlencoded({
     extended: true
 }));
 
-const API_KEY = '';
+const API_KEY = '0f46ade723efd6f37b48cc8c20b799a3';
 
 server.use(bodyParser.json());
 
